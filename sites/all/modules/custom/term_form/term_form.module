@@ -1,0 +1,42 @@
+<?php
+
+/**
+ * Implementatation of hook_menu().
+ */
+function term_form_menu() {
+  $items['add/card'] = array(
+    'title' => 'Add Card',
+    'description' => 'Add a card.',
+    'page callback' => 'term_form_form_render',
+    'page arguments' => array(t('Add Community Group')),
+    'access callback' => TRUE,
+    'expanded' => TRUE,
+  );
+  return $items;
+}
+
+/**
+ * Alter the community group form (a content type.)
+ */
+function term_form_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id == 'card_node_form') {  
+
+    $form['#prefix'] = '<h3>' .t("Add a card.") . '</h3>';
+
+    // Hide content type settings except for admins.
+    // defaultcontent and revisions are showing and they are distracting.
+    // @TODO fix those modules to have better permission control.
+    $access = user_access('administer nodes');
+    if(!$access) {
+      $form['additional_settings']['#access'] = FALSE;
+    }
+
+    $form['field_color_background']['und'][0]['value']['#type'] = 'jquery_colorpicker';
+    $form['field_color_background']['und'][0]['value']['#default_value'] = $form['field_color_background']['und'][0]['value']['#default_value'] ? $form['field_color_background']['und'][0]['value']['#default_value'] : '000000';    
+
+
+    $form['field_color_text']['und'][0]['value']['#type'] = 'jquery_colorpicker';
+    $form['field_color_text']['und'][0]['value']['#default_value'] = $form['field_color_text']['und'][0]['value']['#default_value'] ? $form['field_color_text']['und'][0]['value']['#default_value'] : 'FFFFFF';    
+
+  }
+}

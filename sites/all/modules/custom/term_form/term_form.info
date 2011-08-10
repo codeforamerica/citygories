@@ -1,0 +1,6 @@
+name = FoodCards Card Form Alter
+description = "FoodCards Card Form"
+core = 7.x
+package = FoodCards
+
+files[] = term_form.module
